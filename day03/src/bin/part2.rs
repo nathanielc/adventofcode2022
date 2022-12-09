@@ -18,7 +18,6 @@ fn main() -> Result<()> {
     let input = fs::read_to_string("input.txt")?;
     let priorities = input
         .lines()
-        .into_iter()
         .chunks(3)
         .into_iter()
         .fold(0_u32, |acc, lines| {
