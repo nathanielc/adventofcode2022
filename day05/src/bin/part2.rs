@@ -25,15 +25,12 @@ fn main() -> Result<()> {
             };
         }
     }
-    println!("pile: {:?}", pile);
     let mut crates = Vec::with_capacity(9);
     for mv in ast.commands {
-        println!("move {:?}", mv);
         let stack = pile.get_mut(&mv.from).unwrap();
         crates.extend(stack.drain(stack.len() - mv.count..stack.len()));
         pile.entry(mv.to)
             .and_modify(|stack| stack.append(&mut crates));
-        println!("pile: {:?}", pile);
     }
     for i in 1..10 {
         let stack = pile.get(&i).unwrap();
