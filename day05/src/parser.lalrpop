@@ -1,0 +1,64 @@
+use crate::{File,Pile,Row,Term,Move};
+
+grammar;
+
+pub File : File = {
+    <pile:Pile> newline <commands:Commands> => File {
+        pile,
+        commands,
+    },
+};
+pub Pile: Pile = {
+    <rows:Row*> => Pile {
+        rows,
+    },
+};
+
+Commands: Vec<Move> = {
+    <Move*> => <>,
+};
+
+pub Row: Row = {
+    <first:Term> <rest:(space <Term>)*> newline => {
+        let mut terms = vec![first];
+        terms.extend(rest);
+        Row {
+            terms,
+        }
+    },
+};
+
+Term: Term = {
+    space space space => Term::NullCrate,
+    space <number> space => Term::Label(<>.parse().unwrap()),
+    <c:Crate> => Term::Crate(c),
+};
+
+
+Crate: char = {
+    open <letter> close => <>.chars().next().unwrap(),
+};
+
+
+Move: Move = {
+   move space <count:number> space from space <from:number> space to space <to:number> newline => Move{
+        count: count.parse().unwrap(),
+        from: from.parse().unwrap(),
+        to: to.parse().unwrap(),
+   },
+};
+
+
+match {
+    "[" => open,
+    "]" => close,
+    r"[A-Z]" => letter,
+    r"[0-9]+" => number,
+    " " => space,
+    "\n" => newline,
+    "move" => move,
+    "from" => from,
+    "to" => to,
+    "" => {}, // do not ignore whitesapce
+}
+
