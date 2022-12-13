@@ -39,7 +39,7 @@ fn main() -> Result<()> {
     }
     for i in 1..10 {
         let stack = pile.get(&i).unwrap();
-        crates.push(stack[stack.len()-1]);
+        crates.push(stack[stack.len() - 1]);
     }
     println!("crates: {:?}", crates);
     Ok(())

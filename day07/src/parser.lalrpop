@@ -1,0 +1,26 @@
+use crate::{Log,Action,Entry};
+
+grammar;
+
+pub Log : Log = {
+    <actions:Action*> => Log {
+        actions,
+    },
+};
+Action: Action = {
+    "$ cd" <name> => Action::ChangeDir(<>.to_string()),
+    "$ ls" <entries:Entry*> => Action::List(<>),
+};
+
+Entry: Entry = {
+    dir <name> => Entry::Dir(<>.to_string()),
+    <size:number> <name:name> => Entry::File(size.parse().unwrap(), name.to_string()),
+};
+
+
+match {
+    "dir" => dir,
+    r"[/a-z\.]+" => name,
+    r"\d+" => number,
+    _,
+}

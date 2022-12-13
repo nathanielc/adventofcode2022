@@ -12,7 +12,7 @@ fn main() -> Result<()> {
             set.drain(0..1);
             set.push(c);
             if is_sop(&set) {
-                idx = i+1;
+                idx = i + 1;
                 break;
             }
         };
